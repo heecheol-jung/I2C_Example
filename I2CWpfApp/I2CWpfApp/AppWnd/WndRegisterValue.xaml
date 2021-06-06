@@ -1,0 +1,128 @@
+﻿<Window x:Class="I2CWpfApp.AppWnd.WndRegisterValue"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:I2CWpfApp.AppWnd"
+        xmlns:appConverter="clr-namespace:I2CWpfApp.AppConverter"
+        mc:Ignorable="d"
+        Title="Register Value Edit" Height="800" Width="900" Loaded="Window_Loaded">
+    <Window.Resources>
+        <appConverter:HexConverter x:Key="appHexConverter" />
+        <appConverter:AccessTypeConverter x:Key="appAccessTypeConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Vertical" Grid.Column="0">
+            
+            <StackPanel Orientation="Horizontal">
+                <Label Content="File name"/>
+                <TextBox x:Name="TbFIleName" MinWidth="200" Margin="2"/>
+                <Button Content="Load" Width="50" Margin="2" Click="BtnRegisterValueLoad_Click"/>
+                <Button Content="Export" Width="50" Margin="2" Click="BtnRegisterValueExport_Click"/>
+            </StackPanel>
+
+            <DataGrid x:Name="DgRegister" RowDetailsVisibilityMode="VisibleWhenSelected" AutoGenerateColumns="False" IsReadOnly="True" Height="150" Margin="5" SelectionChanged="DgRegister_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="nameColumn" Width="SizeToHeader" Header="Name" Binding="{Binding Name}" MinWidth="200"/>
+                    <DataGridTextColumn x:Name="addressColumn" Width="0.7*" MinWidth="50" Header="Address" Binding="{Binding Address, Converter={StaticResource appHexConverter}}"/>
+                    <DataGridTextColumn x:Name="bitsColumn" Width="0.5*" Header="Bits" Binding="{Binding Bits}"/>
+                    <DataGridTextColumn x:Name="resetValueColumn" Width="0.7*" Header="Reset value" Binding="{Binding ResetValue}"/>
+                    <DataGridTextColumn x:Name="descriptionColumn" Width="*" Header="Description" Binding="{Binding Description}"/>
+                    <DataGridTextColumn x:Name="registerValue" Width="*" Header="Value" Binding="{Binding Value, Converter={StaticResource appHexConverter}, Mode=TwoWay}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Add" Width="50" Margin="2" Click="BtnAddRegisterValue_Click"/>
+                <Button Content="Remove" Width="50" Margin="2" Click="BtnRemoveRegisterValue_Click"/>
+            </StackPanel>
+
+            <ContentControl x:Name="BitFieldPlaceHolder" Margin="5" VerticalAlignment="Stretch" MinHeight="230" HorizontalAlignment="Stretch"/>
+
+            <DataGrid x:Name="DgRegisterBitField" Margin="5" Height="250" AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" SelectionChanged="DgRegisterBitField_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="bfNameColumn" Binding="{Binding Name}" Header="Name" Width="SizeToHeader" MinWidth="200"/>
+                    <DataGridTextColumn x:Name="bfOffsetColumn" Binding="{Binding Offset}" Header="Offset"  Width="SizeToHeader" MinWidth="50"/>
+                    <DataGridTextColumn x:Name="bfBitsColumn" Binding="{Binding Bits}" Header="Bits" Width="SizeToHeader" MinWidth="50"/>
+                    <DataGridTextColumn x:Name="bfAccesstypeColumn" Binding="{Binding AccessType, Converter={StaticResource appAccessTypeConverter}}" Header="Access type" Width="SizeToHeader" MinWidth="50"/>
+                    <DataGridTextColumn x:Name="bfResetValueColumn" Binding="{Binding ResetValue}" Header="Reset value" Width="SizeToHeader" MinWidth="60"/>
+                    <DataGridTextColumn x:Name="bfValue" Binding="{Binding Value, Converter={StaticResource appHexConverter}}" Header="Value" Width="*" MinWidth="80"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="2">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Register"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Name"/>
+                <TextBox x:Name="TbRegisterName" Grid.Row="1" Grid.Column="1" Margin="2" IsReadOnly="True"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Value"/>
+                <TextBox x:Name="TbRegisterValue" Grid.Row="2" Grid.Column="1" Margin="2"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Address"/>
+                <TextBox x:Name="TbRegisterAddress" Grid.Row="3" Grid.Column="1" Margin="2" IsReadOnly="True"/>
+
+            </Grid>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Apply" Margin="2" MinWidth="50" Click="BtnRegisterValueApply_Click"/>
+                <!--<Button Content="Write" Margin="2"  MinWidth="50"/>-->
+            </StackPanel>
+
+            <Grid HorizontalAlignment="Stretch" Margin="0,30">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Bit Field"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Name"/>
+                <TextBox x:Name="TbBitFieldName" Grid.Row="1" Grid.Column="1" Margin="2" IsReadOnly="True"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Value"/>
+                <TextBox x:Name="TbBitFieldValue" Grid.Row="2" Grid.Column="1" Margin="2"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Offset"/>
+                <TextBox x:Name="TbBitFieldOffset" Grid.Row="3" Grid.Column="1" Margin="2" IsReadOnly="True"/>
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Bits"/>
+                <TextBox x:Name="TbBitFieldBits" Grid.Row="4" Grid.Column="1" Margin="2" IsReadOnly="True"/>
+
+                <Label Grid.Row="5" Grid.Column="0" Content="Description"/>
+                <ScrollViewer Grid.Row="5" Grid.Column="1" Margin="2" Height="100">
+                    <TextBlock x:Name="TbBitFieldDescription"   TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Visible"/>
+                </ScrollViewer>
+            </Grid>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Apply" Margin="2" MinWidth="50" Click="BtnBitFieldValueApply_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
